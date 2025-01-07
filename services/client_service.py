@@ -1,4 +1,5 @@
 import logging
+from utils.database import db
 from models.client import Client
 
 logger = logging.getLogger(__name__)
@@ -23,7 +24,7 @@ def get_all_clients():
         ]
     except Exception as e:
         logger.error(f"Error fetching all clients: {e}")
-        return {"error": "Internal Server Error"}, 500
+        return {"error": "Internal Server Error"}
 
 def get_client(client_id):
     """
@@ -45,7 +46,7 @@ def get_client(client_id):
         }
     except Exception as e:
         logger.error(f"Error fetching client {client_id}: {e}")
-        return {"error": "Internal Server Error"}, 500
+        return {"error": "Internal Server Error"}
 
 def create_client(name, email, phone, address):
     """
@@ -58,7 +59,8 @@ def create_client(name, email, phone, address):
     """
     try:
         client = Client(name=name, email=email, phone=phone, address=address)
-        client.save()  # Save the new client to the database
+        db.session.add(client)  # Save the new client to the database
+        db.session.commit() # Save the new client to the database
         return {
             "client_id": client.client_id,
             "name": client.name,
@@ -66,10 +68,11 @@ def create_client(name, email, phone, address):
             "phone": client.phone,
             "address": client.address,
             "created_at": client.created_at,
-        }, 201
+        }
     except Exception as e:
         logger.error(f"Error creating client: {e}")
-        return {"error": "Internal Server Error"}, 500
+        return {"error": "Internal Server Error"}
+
 
 def update_client(client_id, name, email, phone, address):
     """
@@ -82,14 +85,21 @@ def update_client(client_id, name, email, phone, address):
     :return: tuple: A dictionary containing the updated client's information or an error message and the HTTP status code.
     """
     try:
+        # Find the client by ID
         client = Client.query.get(client_id)
+
         if not client:
-            return {"error": f"Client with ID {client_id} not found."}, 404
-        client.name = name
-        client.email = email
-        client.phone = phone
-        client.address = address
-        client.save()  # Save the updated client to the database
+            return None
+
+        # Update the fields if new values are provided (they can be optional)
+        client.name = name if name else client.name
+        client.email = email if email else client.email
+        client.phone = phone if phone else client.phone
+        client.address = address if address else client.address
+
+        # Commit the changes to the database
+        db.session.commit()
+        # Return updated client information
         return {
             "client_id": client.client_id,
             "name": client.name,
@@ -99,9 +109,10 @@ def update_client(client_id, name, email, phone, address):
             "created_at": client.created_at,
         }
     except Exception as e:
+        # If an error occurs, rollback the transaction
+        db.session.rollback()
         logger.error(f"Error updating client {client_id}: {e}")
-        return {"error": "Internal Server Error"}, 500
-
+        return {"error": "Internal Server Error"}
 def delete_client(client_id):
     """
     Delete a client.
@@ -111,9 +122,12 @@ def delete_client(client_id):
     try:
         client = Client.query.get(client_id)
         if not client:
-            return {"error": f"Client with ID {client_id} not found."}, 404
-        client.delete()  # Delete the client from the database
-        return {"message": f"Client with ID {client_id} deleted."}, 204
+            return None
+        # Delete the client
+        db.session.delete(client)
+        # Commit the deletion
+        db.session.commit()
+        return client
     except Exception as e:
         logger.error(f"Error deleting client {client_id}: {e}")
-        return {"error": "Internal Server Error"}, 500
+        return {"error": "Internal Server Error"}
