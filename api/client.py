@@ -65,7 +65,7 @@ class ClientList(Resource):
         data = clients_ns.payload  # Extract JSON payload
         try:
             # Call the service to create a new client
-            return create_client(data), 201
+            return create_client(data["name"],data["email"],data["phone"],data["address"]), 201
         except HTTPException as http_err:
             logger.error(f"HTTP error while creating client: {http_err}")
             raise http_err
@@ -118,7 +118,7 @@ class Client(Resource):
         data = clients_ns.payload  # Extract JSON payload
         try:
             # Call the service to update the client
-            client = update_client(client_id, data)
+            client = update_client(client_id, data["name"],data["email"],data["phone"],data["address"])
             if not client:
                 # Return a 404 error if client does not exist
                 clients_ns.abort(404, f"Client with ID {client_id} not found.")

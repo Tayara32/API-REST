@@ -56,7 +56,7 @@ class EmployeeList(Resource):
         """
         try:
             data = employees_ns.payload
-            employee = create_employee(data)
+            employee = create_employee(data['name'], data['email'], data['phone'], data['role'], data['hired_date'])
             return employee, 201
         except HTTPException as http_err:
             # Allow HTTP exceptions to propagate as they are
@@ -110,7 +110,7 @@ class Employee(Resource):
         """
         try:
             data = employees_ns.payload
-            updated_employee = update_employee(employee_id, data)
+            updated_employee = update_employee(employee_id, data['name'], data['email'], data['phone'], data['role'], data['hired_date'])
             if not updated_employee:
                 employees_ns.abort(404, f"Employee with ID {employee_id} not found.")
             return updated_employee
