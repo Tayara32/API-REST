@@ -19,6 +19,7 @@ CREATE TABLE employee (
     created_at DATETIME DEFAULT (CURRENT_TIMESTAMP)
 );
 
+
 -- Inserir dados na tabela de clientes
 INSERT INTO client (name, email, phone, address) VALUES
 ('João Silva', 'joao.silva@example.com', '912345678', 'Rua A, 123, Lisboa'),
