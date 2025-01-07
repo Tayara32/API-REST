@@ -1,8 +1,9 @@
 import logging
-from flask_restx import Namespace, Resource
+from flask_restx import Namespace, Resource, abort
 from models.employee import Employee
 from services.employee_service import get_all_employees, get_employee, create_employee, update_employee, delete_employee
 from utils.utils import generate_swagger_model
+from werkzeug.exceptions import HTTPException, BadRequest, NotFound
 
 # Initialize logging
 logging.basicConfig(level=logging.INFO)
@@ -21,28 +22,33 @@ employee_model = generate_swagger_model(
 
 # Routes for managing employees
 @employees_ns.route('/')
+@employees_ns.response(500, 'Internal Server Error')
 class EmployeeList(Resource):
     """
     Resource for operations on the collection of employees (GET all, POST new).
     """
-
     @employees_ns.doc('get_all_employees')
     @employees_ns.marshal_list_with(employee_model)
     def get(self):
         """
-        Get all employees.
+        Retrieve all employees.
         :return: List of all employees in dictionary format
         """
         try:
             employees = get_all_employees()
             return employees
+        except HTTPException as http_err:
+            # Allow HTTP exceptions to propagate as they are
+            raise http_err
         except Exception as e:
+            # Log and handle unexpected exceptions with a 500 status code
             logger.error(f"Error fetching all employees: {e}")
             employees_ns.abort(500, "Internal Server Error")
 
     @employees_ns.doc('create_employee')
     @employees_ns.expect(employee_model)
     @employees_ns.marshal_with(employee_model, code=201)
+    @employees_ns.response(400, 'Bad Request')
     def post(self):
         """
         Create a new employee.
@@ -52,37 +58,50 @@ class EmployeeList(Resource):
             data = employees_ns.payload
             employee = create_employee(data)
             return employee, 201
+        except HTTPException as http_err:
+            # Allow HTTP exceptions to propagate as they are
+            raise http_err
         except Exception as e:
+            # Log and handle unexpected exceptions with a 400 status code
             logger.error(f"Error creating employee: {e}")
             employees_ns.abort(400, "Bad Request")
 
+
 @employees_ns.route('/<int:employee_id>')
+@employees_ns.response(404, 'Employee ID not found')
+@employees_ns.response(500, 'Internal Server Error')
 @employees_ns.param('employee_id', 'Employee ID')
 class Employee(Resource):
     """
     Resource for operations on a single employee (GET, PUT, DELETE).
     """
-
-    @employees_ns.doc('get_employee')
-    @employees_ns.marshal_with(employee_model)
-    def get(self, employee_id):
-        """
-        Get a specific employee by ID.
-        :param employee_id: The ID of the employee
-        :return: Dictionary of the employee or a 404 error if not found
-        """
-        try:
-            employee = get_employee(employee_id)
-            if not employee:
-                employees_ns.abort(404, f"Employee with ID {employee_id} not found.")
-            return employee
-        except Exception as e:
-            logger.error(f"Error fetching employee {employee_id}: {e}")
-            employees_ns.abort(500, "Internal Server Error")
+    @employees_ns.route('/<int:employee_id>')
+    class EmployeeResource(Resource):
+        @employees_ns.doc('get_employee')
+        @employees_ns.marshal_with(employee_model)
+        def get(self, employee_id):
+            """
+            Retrieve a specific employee by ID.
+            """
+            try:
+                # Fetch the employee by ID
+                employee = get_employee(employee_id)
+                if not employee:
+                    # Abort with a 404 status and custom message
+                    raise NotFound('My custom message')
+                return employee
+            # except HTTPException as http_err:
+            #     # Allow HTTP exceptions to propagate as they are
+            #     raise http_err
+            except Exception as e:
+                # Log and handle unexpected exceptions with a 500 status code
+                logger.error(f"Error fetching employee {employee_id}: {e}")
+                abort(500, description="Internal Server Error")
 
     @employees_ns.doc('update_employee')
     @employees_ns.expect(employee_model)
     @employees_ns.marshal_with(employee_model)
+    @employees_ns.response(400, 'Bad Request')
     def put(self, employee_id):
         """
         Update an employee.
@@ -95,7 +114,11 @@ class Employee(Resource):
             if not updated_employee:
                 employees_ns.abort(404, f"Employee with ID {employee_id} not found.")
             return updated_employee
+        except HTTPException as http_err:
+            # Allow HTTP exceptions to propagate as they are
+            raise http_err
         except Exception as e:
+            # Log and handle unexpected exceptions with a 400 status code
             logger.error(f"Error updating employee {employee_id}: {e}")
             employees_ns.abort(400, "Bad Request")
 
@@ -111,7 +134,10 @@ class Employee(Resource):
             if not deleted:
                 employees_ns.abort(404, f"Employee with ID {employee_id} not found.")
             return '', 204
+        except HTTPException as http_err:
+            # Allow HTTP exceptions to propagate as they are
+            raise http_err
         except Exception as e:
+            # Log and handle unexpected exceptions with a 500 status code
             logger.error(f"Error deleting employee {employee_id}: {e}")
             employees_ns.abort(500, "Internal Server Error")
-

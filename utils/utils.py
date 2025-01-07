@@ -56,7 +56,7 @@ def configure_logging():
         level=logging.DEBUG,  # You can adjust the level (DEBUG, INFO, etc.)
         format='%(asctime)s - %(levelname)s - %(message)s',  # Log message format
         handlers=[
-            logging.StreamHandler(),  # Logs to console
+            #logging.StreamHandler(),  # Logs to console
             logging.FileHandler('app.log', mode='a')  # Logs to file (app.log)
         ]
     )

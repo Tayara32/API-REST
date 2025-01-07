@@ -1,8 +1,11 @@
 from flask import Flask
+from sqlalchemy import false
+
 from api import api_bp  # Import the API blueprint
 from config import Config  # Import the configuration class
 from utils.database import db  # Import the SQLAlchemy database instance
 from utils.utils import configure_logging  # Import the logging configuration function
+from errors.errors import register_error_handlers
 
 
 def create_app():
@@ -15,8 +18,8 @@ def create_app():
     try:
         app = Flask(__name__)
         app.config.from_object(Config)  # Load configuration from the Config class
-        # Initialize extensions (e.g., SQLAlchemy)
-        db.init_app(app)
+        register_error_handlers(app)  # Register error handlers for 404 and 500 errors
+        db.init_app(app) # Initialize extensions (e.g., SQLAlchemy)
         # Register blueprints (e.g., API routes)
         app.register_blueprint(api_bp)
         return app
@@ -32,9 +35,10 @@ def create_app():
 if __name__ == "__main__":
     # Create the Flask application instance and run it in debug mode
     try:
-        configure_logging()  # Configure the logging system
+        #configure_logging()  # Configure the logging system
         app = create_app()
-        app.run(debug=True)  # Running in debug mode for development
+        app.run(debug=False)  # Running in debug mode for development
+        #app.run(ERROR_INCLUDE_MESSAGE=False)
     except Exception as e:
         # Catch any exception that occurs while starting the app
         print(f"Failed to start the application: {e}")
