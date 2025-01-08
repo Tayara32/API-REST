@@ -112,7 +112,7 @@ class WorkResource(Resource):
         try:
             work = update_work(
                 work_id, data.get("cost"), data.get("description"),
-                data.get("end_date"), data.get("start_date"), data.get("status"), data.get("vehicle_id"), data.get("created_at")
+                data.get("end_date"), data.get("start_date"), data.get("status"), data.get("vehicle_id")
             )
             if not work:
                 works_ns.abort(404, f"Work with ID {work_id} not found.")

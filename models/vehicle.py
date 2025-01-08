@@ -17,7 +17,7 @@ class Vehicle(db.Model):
     model =  db.Column(db.String(80), nullable=False)
     license_plate =  db.Column(db.String(20), unique=True, nullable=False)
     year =  db.Column(db.Integer, nullable=False)
-    client_id =  db.Column(db.Integer, ForeignKey('clients.client_id'), nullable=False)
+    client_id =  db.Column(db.Integer, ForeignKey('client.client_id'), nullable=False)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     relationship('Client', back_populates='vehicles')
 

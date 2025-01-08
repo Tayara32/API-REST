@@ -65,8 +65,8 @@ class VehicleList(Resource):
         try:
             # Call the service to create a new vehicle
             return create_vehicle(
-                data["brand"], data["client_id"], data["created_at"],
-                data["license_plate"], data["model"], data["year"]
+                data["brand"], data["model"], data["license_plate"],
+                data["year"], data["client_id"], data["created_at"]
             ), 201
         except HTTPException as http_err:
             logger.error(f"HTTP error while creating vehicle: {http_err}")
@@ -121,8 +121,7 @@ class Vehicle(Resource):
         try:
             # Call the service to update the vehicle
             vehicle = update_vehicle(
-                vehicle_id, data.get("brand"), data.get("client_id"), data.get("created_at"),
-                data.get("license_plate"), data.get("model"), data.get("year")
+                vehicle_id, data.get("brand"), data.get("model"), data.get("license_plate"),  data.get("year"), data.get("client_id")
             )
             if not vehicle:
                 # Return a 404 error if vehicle does not exist

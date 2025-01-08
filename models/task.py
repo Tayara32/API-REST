@@ -15,8 +15,8 @@ class Task(db.Model):
     status = db.Column(db.String(80))
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
-    start_date = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
-    end_date = db.Column(db.DateTime, server_default=db.func.now())
+    start_date = db.Column(db.Date, nullable=False)
+    end_date = db.Column(db.Date)
 
     work_id = db.Column(db.Integer, ForeignKey('work.work_id'), nullable=False)
     relationship("Work", back_populates="tasks")

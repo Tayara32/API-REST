@@ -90,7 +90,7 @@ def create_vehicle(brand, model, license_plate, year, client_id, created_at):
         return {"error": "Internal Server Error"}
 
 
-def update_vehicle(vehicle_id, brand=None, model=None, license_plate=None, year=None, client_id=None, created_at=None):
+def update_vehicle(vehicle_id, brand=None, model=None, license_plate=None, year=None, client_id=None):
     """
     Update an existing vehicle.
     :param vehicle_id: The ID of the vehicle to update.
@@ -112,7 +112,6 @@ def update_vehicle(vehicle_id, brand=None, model=None, license_plate=None, year=
         vehicle.license_plate = license_plate if license_plate else vehicle.license_plate
         vehicle.year = year if year else vehicle.year
         vehicle.client_id = client_id if client_id else vehicle.client_id
-        vehicle.created_at = created_at if created_at else vehicle.created_at
 
         db.session.commit()  # Commit the changes to the database
         return {
@@ -122,7 +121,6 @@ def update_vehicle(vehicle_id, brand=None, model=None, license_plate=None, year=
             "license_plate": vehicle.license_plate,
             "year": vehicle.year,
             "client_id": vehicle.client_id,
-            "created_at": vehicle.created_at,
         }
     except Exception as e:
         db.session.rollback()  # Rollback in case of an error

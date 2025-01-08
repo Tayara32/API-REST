@@ -91,7 +91,7 @@ def create_work(cost, description, start_date, end_date, status, vehicle_id, cre
         logger.error(f"Error creating work: {e}")
         return {"error": "Internal Server Error"}
 
-def update_work(work_id, cost=None, description=None, start_date=None, end_date=None, status=None, vehicle_id=None, created_at=None):
+def update_work(work_id, cost=None, description=None, start_date=None, end_date=None, status=None, vehicle_id=None):
     """
     Update an existing work.
     :param work_id: The ID of the work to update.
@@ -114,7 +114,6 @@ def update_work(work_id, cost=None, description=None, start_date=None, end_date=
         work.end_date = end_date if end_date else work.end_date
         work.status = status if status else work.status
         work.vehicle_id = vehicle_id if vehicle_id else work.vehicle_id
-        work.created_at = created_at if created_at else work.created_at
 
         db.session.commit()
         return {
@@ -125,7 +124,6 @@ def update_work(work_id, cost=None, description=None, start_date=None, end_date=
             "end_date": work.end_date,
             "status": work.status,
             "vehicle_id": work.vehicle_id,
-            "created_at": work.created_at,
         }
     except Exception as e:
         db.session.rollback()
