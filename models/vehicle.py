@@ -3,7 +3,7 @@ from sqlalchemy import ForeignKey
 from utils.database import db
 
 
-# Model definition for the 'Client' table
+# Model definition for the 'Vehicle' table
 def relationship(param, back_populates):
     pass
 

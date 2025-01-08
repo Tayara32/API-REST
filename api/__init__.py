@@ -1,6 +1,8 @@
 from flask import Blueprint
 from flask_restx import Api
 
+
+
 # Main Blueprint for all API routes
 api_bp = Blueprint('api', __name__, url_prefix='/api')
 
@@ -17,8 +19,10 @@ api = Api(
 from .client import clients_ns
 from .employee import employees_ns
 from .vehicle import vehicles_ns
+from .work import works_ns
 
 # Add namespaces to the Swagger documentation and API
 api.add_namespace(clients_ns, path='/client')  # Routes for client operations
 api.add_namespace(employees_ns, path='/employee')  # Routes for employee operations
 api.add_namespace(vehicles_ns, path='/vehicle')
+api.add_namespace(works_ns, path='/work')
