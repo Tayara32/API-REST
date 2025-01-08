@@ -16,7 +16,7 @@ class Work(db.Model):
     cost =  db.Column(db.Float)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     description =  db.Column(db.String(80), nullable=False)
-    end_dat = db.Column(db.DateTime, server_default=db.func.now())
+    end_date = db.Column(db.DateTime, server_default=db.func.now())
     start_date = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
     status = db.Column(db.String(80))
 

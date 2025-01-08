@@ -52,7 +52,7 @@ def get_work(work_id):
         logger.error(f"Error fetching work {work_id}: {e}")
         return {"error": "Internal Server Error"}
 
-def create_work(cost, description, start_date, end_date, status, vehicle_id):
+def create_work(cost, description, start_date, end_date, status, vehicle_id, created_at):
     """
     Create a new work entry.
     :param cost: The cost of the work.
@@ -61,6 +61,7 @@ def create_work(cost, description, start_date, end_date, status, vehicle_id):
     :param end_date: End date of the work.
     :param status: Current status of the work.
     :param vehicle_id: The ID of the associated vehicle.
+    :param created_at: Timestamp when the work was created.
     :return: dict: A dictionary containing the newly created work's information or an error message.
     """
     try:
@@ -71,6 +72,7 @@ def create_work(cost, description, start_date, end_date, status, vehicle_id):
             end_date=end_date,
             status=status,
             vehicle_id=vehicle_id,
+            created_at=created_at,
         )
         db.session.add(work)
         db.session.commit()
@@ -89,7 +91,7 @@ def create_work(cost, description, start_date, end_date, status, vehicle_id):
         logger.error(f"Error creating work: {e}")
         return {"error": "Internal Server Error"}
 
-def update_work(work_id, cost=None, description=None, start_date=None, end_date=None, status=None, vehicle_id=None):
+def update_work(work_id, cost=None, description=None, start_date=None, end_date=None, status=None, vehicle_id=None, created_at=None):
     """
     Update an existing work.
     :param work_id: The ID of the work to update.
@@ -112,6 +114,7 @@ def update_work(work_id, cost=None, description=None, start_date=None, end_date=
         work.end_date = end_date if end_date else work.end_date
         work.status = status if status else work.status
         work.vehicle_id = vehicle_id if vehicle_id else work.vehicle_id
+        work.created_at = created_at if created_at else work.created_at
 
         db.session.commit()
         return {

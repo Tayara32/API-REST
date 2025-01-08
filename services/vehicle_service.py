@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 def get_all_vehicle():
     """
-    Retrieve all clients.
+    Retrieve all vehicles.
     :return: list: A list of dictionaries containing information about all clients.
     """
     try:
@@ -52,14 +52,15 @@ def get_vehicle(vehicle_id):
         logger.error(f"Error fetching vehicle {vehicle_id}: {e}")
         return {"error": "Internal Server Error"}
 
-def create_vehicle(brand, model, license_plate, year, client_id):
+def create_vehicle(brand, model, license_plate, year, client_id, created_at):
     """
     Create a new vehicle.
     :param brand: The brand of the vehicle.
     :param model: The model of the vehicle.
     :param license_plate: The license plate of the vehicle.
-    :param year: The year of the vehicle.
+    :param year: The manufacturing year of the vehicle.
     :param client_id: The ID of the client who owns the vehicle.
+    :param created_at: Timestamp when the vehicle was created.
     :return: dict: A dictionary containing the newly created vehicle's information or an error message.
     """
     try:
@@ -69,6 +70,9 @@ def create_vehicle(brand, model, license_plate, year, client_id):
             license_plate=license_plate,
             year=year,
             client_id=client_id,
+            created_at=created_at,
+
+
         )
         db.session.add(vehicle)  # Save the new vehicle to the database
         db.session.commit()
@@ -86,7 +90,7 @@ def create_vehicle(brand, model, license_plate, year, client_id):
         return {"error": "Internal Server Error"}
 
 
-def update_vehicle(vehicle_id, brand=None, model=None, license_plate=None, year=None, client_id=None):
+def update_vehicle(vehicle_id, brand=None, model=None, license_plate=None, year=None, client_id=None, created_at=None):
     """
     Update an existing vehicle.
     :param vehicle_id: The ID of the vehicle to update.
@@ -108,6 +112,7 @@ def update_vehicle(vehicle_id, brand=None, model=None, license_plate=None, year=
         vehicle.license_plate = license_plate if license_plate else vehicle.license_plate
         vehicle.year = year if year else vehicle.year
         vehicle.client_id = client_id if client_id else vehicle.client_id
+        vehicle.created_at = created_at if created_at else vehicle.created_at
 
         db.session.commit()  # Commit the changes to the database
         return {

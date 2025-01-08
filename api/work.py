@@ -61,7 +61,7 @@ class WorkList(Resource):
         data = works_ns.payload
         try:
             return create_work(
-                data["title"], data["description"], data["client_id"], data["status"]
+                data["cost"], data["description"], data["end_date"], data["start_date"], data["status"], data["vehicle_id"], data["created_at"]
             ), 201
         except HTTPException as http_err:
             logger.error(f"HTTP error while creating work: {http_err}")
@@ -111,8 +111,8 @@ class WorkResource(Resource):
         data = works_ns.payload
         try:
             work = update_work(
-                work_id, data.get("title"), data.get("description"),
-                data.get("client_id"), data.get("status")
+                work_id, data.get("cost"), data.get("description"),
+                data.get("end_date"), data.get("start_date"), data.get("status"), data.get("vehicle_id"), data.get("created_at")
             )
             if not work:
                 works_ns.abort(404, f"Work with ID {work_id} not found.")
