@@ -1,5 +1,14 @@
 # **Relatório do Projeto Garage Flask API**
 
+**Versão:** v1.0  
+**Autores:** Beatriz Guerra, Pedro Pires e Tayara Cruz  
+**Formador:** Nelson Santos   
+**Data:** Dezembro, 2024  
+**UFCD:** 5417 - Programação para a WEB - servidor (server-side)   
+**Instituição:** ATEC
+
+---
+
 ## **1. Introdução**
 O projeto **Garage API** foi desenvolvido como parte da disciplina **UFCD 5417 - Programação para a WEB - servidor (server-side)**, com o objetivo de aprimorar a aprendizagem prática sobre APIs. O projeto foi estruturado seguindo boas práticas de desenvolvimento e organização de código, utilizando a framework **Flask** para a criação de endpoints e operações CRUD.
 
