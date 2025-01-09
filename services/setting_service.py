@@ -1,4 +1,6 @@
 import logging
+from datetime import datetime
+
 from models.setting import Setting
 from utils.database import db
 
@@ -86,7 +88,7 @@ def update_setting(setting_id, key_name=None, updated_at=None, value=None):
             return None
 
         setting.key_name = key_name if key_name is not None else setting.key_name
-        setting.updated_at = updated_at if updated_at else setting.updated_at
+        setting.updated_at = datetime.now()
         setting.value = value if value else setting.value
 
         db.session.commit()

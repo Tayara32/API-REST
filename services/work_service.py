@@ -1,4 +1,6 @@
 import logging
+from datetime import datetime
+
 from models.work import Work
 from utils.database import db
 
@@ -52,7 +54,7 @@ def get_work(work_id):
         logger.error(f"Error fetching work {work_id}: {e}")
         return {"error": "Internal Server Error"}
 
-def create_work(cost, description, start_date, end_date, status, vehicle_id, created_at):
+def create_work(cost, description, start_date, end_date, status, vehicle_id):
     """
     Create a new work entry.
     :param cost: The cost of the work.
@@ -61,18 +63,20 @@ def create_work(cost, description, start_date, end_date, status, vehicle_id, cre
     :param end_date: End date of the work.
     :param status: Current status of the work.
     :param vehicle_id: The ID of the associated vehicle.
-    :param created_at: Timestamp when the work was created.
     :return: dict: A dictionary containing the newly created work's information or an error message.
     """
     try:
+        # Convert start_date and end_date string to datetime.date object
+        start_date_obj = datetime.strptime(start_date, "%Y-%m-%d").date()
+        end_date_obj = datetime.strptime(end_date, "%Y-%m-%d").date()
+
         work = Work(
             cost=cost,
             description=description,
-            start_date=start_date,
-            end_date=end_date,
+            start_date=start_date_obj,
+            end_date=end_date_obj,
             status=status,
             vehicle_id=vehicle_id,
-            created_at=created_at,
         )
         db.session.add(work)
         db.session.commit()
@@ -104,14 +108,18 @@ def update_work(work_id, cost=None, description=None, start_date=None, end_date=
     :return: dict: A dictionary containing the updated work's information or an error message.
     """
     try:
+        # Convert start_date and end_date string to datetime.date object
+        start_date_obj = datetime.strptime(start_date, "%Y-%m-%d").date()
+        end_date_obj = datetime.strptime(end_date, "%Y-%m-%d").date()
+
         work = Work.query.get(work_id)
         if not work:
             return None
 
         work.cost = cost if cost is not None else work.cost
         work.description = description if description else work.description
-        work.start_date = start_date if start_date else work.start_date
-        work.end_date = end_date if end_date else work.end_date
+        work.start_date = start_date_obj if start_date_obj else work.start_date
+        work.end_date = end_date_obj if end_date_obj else work.end_date
         work.status = status if status else work.status
         work.vehicle_id = vehicle_id if vehicle_id else work.vehicle_id
 
@@ -124,6 +132,7 @@ def update_work(work_id, cost=None, description=None, start_date=None, end_date=
             "end_date": work.end_date,
             "status": work.status,
             "vehicle_id": work.vehicle_id,
+            "created_at": work.created_at,
         }
     except Exception as e:
         db.session.rollback()

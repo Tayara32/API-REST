@@ -61,7 +61,7 @@ class InvoiceList(Resource):
         data = invoices_ns.payload
         try:
             return create_invoice(
-                data["issued_at"], data["iva"], data["total"], data["total_with_iva"], data["client_id"]
+                data["iva"], data["total"], data["total_with_iva"], data["client_id"]
             ), 201
         except HTTPException as http_err:
             logger.error(f"HTTP error while creating invoice: {http_err}")
@@ -111,8 +111,8 @@ class InvoiceResource(Resource):
         data = invoices_ns.payload
         try:
             invoice = update_invoice(
-                invoice_id, data.get("title"), data.get("description"),
-                data.get("client_id"), data.get("status")
+                invoice_id, data.get("total"), data.get("iva"),
+                data.get("total_with_iva"), data.get("client_id")
             )
             if not invoice:
                 invoices_ns.abort(404, f"invoice with ID {invoice_id} not found.")

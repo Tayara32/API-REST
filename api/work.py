@@ -61,7 +61,7 @@ class WorkList(Resource):
         data = works_ns.payload
         try:
             return create_work(
-                data["cost"], data["description"], data["end_date"], data["start_date"], data["status"], data["vehicle_id"], data["created_at"]
+                data["cost"], data["description"], data["end_date"], data["start_date"], data["status"], data["vehicle_id"]
             ), 201
         except HTTPException as http_err:
             logger.error(f"HTTP error while creating work: {http_err}")

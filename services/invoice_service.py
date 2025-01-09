@@ -48,7 +48,7 @@ def get_invoice(invoice_id):
         logger.error(f"Error fetching invoice {invoice_id}: {e}")
         return {"error": "Internal Server Error"}
 
-def create_invoice(issued_at, iva, total, total_with_iva, client_id):
+def create_invoice(iva, total, total_with_iva, client_id):
     """
     Create a new invoice entry.
     :param issued_at: The datetime the invoice was issued.
@@ -60,7 +60,6 @@ def create_invoice(issued_at, iva, total, total_with_iva, client_id):
     """
     try:
         invoice = Invoice(
-            issued_at=issued_at,
             iva=iva,
             total=total,
             total_with_iva=total_with_iva,
@@ -81,7 +80,7 @@ def create_invoice(issued_at, iva, total, total_with_iva, client_id):
         logger.error(f"Error creating invoice: {e}")
         return {"error": "Internal Server Error"}
 
-def update_invoice(invoice_id, issued_at, iva=None, total=None, total_with_iva=None, client_id=None):
+def update_invoice(invoice_id, iva=None, total=None, total_with_iva=None, client_id=None):
     """
     Update an existing invoice.
     :param invoice_id: The ID of the invoice to update.
@@ -97,7 +96,6 @@ def update_invoice(invoice_id, issued_at, iva=None, total=None, total_with_iva=N
         if not invoice:
             return None
 
-        invoice.issued_at = issued_at if issued_at is not None else invoice.issued_at
         invoice.iva = iva if iva is not None else invoice.iva
         invoice.total = total if total is not None else invoice.total
         invoice.total_with_iva = total_with_iva if total_with_iva is not None else invoice.total_with_iva
