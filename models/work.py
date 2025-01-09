@@ -16,8 +16,8 @@ class Work(db.Model):
     cost =  db.Column(db.Float)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     description =  db.Column(db.String(80), nullable=False)
-    end_date = db.Column(db.DateTime, server_default=db.func.now())
-    start_date = db.Column(db.DateTime, server_default=db.func.now(), nullable=False)
+    end_date = db.Column(db.Date)
+    start_date = db.Column(db.Date, nullable=False)
     status = db.Column(db.String(80))
 
     vehicle_id =  db.Column(db.Integer, ForeignKey('vehicle.vehicle_id'), nullable=False)
