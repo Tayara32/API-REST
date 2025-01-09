@@ -16,7 +16,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Namespace for managing setting
-settings_ns = Namespace('setting', updated_at='CRUD operations for managing settings')
+settings_ns = Namespace('setting', description='CRUD operations for managing settings')
 
 # Generate the Swagger model for the setting resource
 setting_model = generate_swagger_model(

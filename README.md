@@ -9,7 +9,7 @@ O projeto **Garage API** foi desenvolvido como parte da disciplina **UFCD 5417 -
 A estrutura de diretórios do projeto está organizada da seguinte forma:
 
 ### **2.1 Models**
-Os **Models** representam a estrutura dos dados utilizados na aplicação. Eles são responsáveis por definir como as informações serão armazenadas e manipuladas no banco de dados.  
+Os **Models** representam a estrutura dos dados utilizados na aplicação. Eles são responsáveis por definir como as informações serão armazenadas e manipuladas na base de dados.  
 
 ### **2.2 API**
 A **API** é responsável por expor os endpoints para interação com os dados da aplicação. Ela recebe requisições HTTP e retorna respostas formatadas em JSON.
@@ -29,7 +29,7 @@ Adiciona um novo veículo ao sistema.
 
 ### **2.3 Services**  
 
-A camada de **Services** é responsável por centralizar a lógica de negócios da aplicação. Ela abstrai as operações do banco de dados e outras regras de negócios para manter a API mais organizada e modular.
+A camada de **Services** é responsável por centralizar a lógica de negócios da aplicação. Ela abstrai as operações da base de dados e outras regras de negócios para manter a API mais organizada e modular.
 
 ---
 
@@ -50,8 +50,8 @@ A modelagem segue uma estrutura relacional com as seguintes tabelas principais:
 A  API implementa operações **CRUD** (Create, Read, Update, Delete) para cada entidade.
 
 ### **Principais Endpoints**
-- **Clientes:** Cadastro, edição e listagem.
-- **Veículos:** Registro e associação aos clientes.
+- **Clientes:** Registo, edição, listagem e remoção.
+- **Veículos:** Registo e associação aos clientes.
 - **Serviços:** Gerenciamento de serviços.
 - **Tarefas:** Gestão das tarefas dentro dos serviços.
 - **Funcionários:** Controle dos funcionários.
@@ -106,11 +106,3 @@ Para acessar a documentação do Swagger, inicie a aplicação Flask e navegue a
 ## **7. Conclusão**
 O projeto Garage API foi desenvolvido como um exercício prático para consolidar conhecimentos sobre APIs com `Flask`, `base de dados relacional` e `boas práticas de arquitetura de software`. 
 A implementação segue princípios modulares, garantindo flexibilidade e escalabilidade à aplicação.
-
-
-
-
-
-
-
-
