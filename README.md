@@ -3,7 +3,7 @@
 **Versão:** v1.0  
 **Autores:** Beatriz Guerra, Pedro Pires e Tayara Cruz  
 **Formador:** Nelson Santos   
-**Data:** Dezembro, 2024  
+**Data:** Janeiro 2025
 **UFCD:** 5417 - Programação para a WEB - servidor (server-side)   
 **Instituição:** ATEC
 
