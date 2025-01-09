@@ -1,4 +1,6 @@
 import logging
+from datetime import datetime
+
 from models.task import Task
 from utils.database import db
 
@@ -64,11 +66,15 @@ def create_task(description, status, start_date, end_date, work_id, employee_id)
     :return: dict: A dictionary containing the newly created task's information or an error message.
     """
     try:
+        # Convert start_date and end_date string to datetime.date object
+        start_date_obj = datetime.strptime(start_date, "%Y-%m-%d").date()
+        end_date_obj = datetime.strptime(end_date, "%Y-%m-%d").date()
+
         task = Task(
             description=description,
             status=status,
-            start_date=start_date,
-            end_date=end_date,
+            start_date=start_date_obj,
+            end_date=end_date_obj,
             work_id=work_id,
             employee_id=employee_id,
         )
@@ -102,14 +108,18 @@ def update_task(task_id, description=None, status=None, start_date=None, end_dat
     :return: dict: A dictionary containing the updated task's information or an error message.
     """
     try:
+        # Convert start_date and end_date string to datetime.date object
+        start_date_obj = datetime.strptime(start_date, "%Y-%m-%d").date()
+        end_date_obj = datetime.strptime(end_date, "%Y-%m-%d").date()
+
         task = Task.query.get(task_id)
         if not task:
             return None
 
         task.description = description if description else task.description
         task.status = status if status else task.status
-        task.start_date = start_date if start_date else task.start_date
-        task.end_date = end_date if end_date else task.end_date
+        task.start_date = start_date_obj if start_date_obj else task.start_date
+        task.end_date = end_date_obj if end_date_obj else task.end_date
         task.work_id = work_id if work_id else task.work_id
         task.employee_id = employee_id if employee_id else task.employee_id
 
