@@ -33,7 +33,7 @@ A camada de **Services** é responsável por centralizar a lógica de negócios 
 
 ---
 
-## **3. Banco de Dados**
+## **3. Base de Dados**
 A modelagem segue uma estrutura relacional com as seguintes tabelas principais:
 
 - **client** → Informações dos clientes.
